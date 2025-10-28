@@ -112,7 +112,7 @@ services:
     volumes:
       - ./UserService/src/UserService.API/etc:/app/etc:ro
     env_file:
-      - ./UserService/src/UserService.API/.env
+      - ./.env
 
   paymentservice-api:
     image: zhenya3148/synapzeai-paymentservice-backend:1.0
