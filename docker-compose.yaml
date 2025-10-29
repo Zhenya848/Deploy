@@ -1,7 +1,7 @@
 services:
   postgres_tests_service:
     container_name: tests_service_db
-    image: postgres
+    image: postgres:latest
     restart: always
     environment:
       POSTGRES_DB: tests_service_project
@@ -10,11 +10,11 @@ services:
     ports:
       - 5436:5432
     volumes:
-      - postgres_tests_data:/var/lib/postgresql/data
+      - postgres_tests_data:/var/lib/postgresql
 
   postgres_user_service:
     container_name: user_service_db
-    image: postgres
+    image: postgres:latest
     restart: always
     environment:
       POSTGRES_DB: user_service_project
@@ -23,11 +23,11 @@ services:
     ports:
       - 5435:5432
     volumes:
-      - postgres_user_data:/var/lib/postgresql/data
+      - postgres_user_data:/var/lib/postgresql
 
   postgres_payment_service:
     container_name: payment_service_db
-    image: postgres
+    image: postgres:latest
     restart: always
     environment:
       POSTGRES_DB: payment_service_project
@@ -36,7 +36,7 @@ services:
     ports:
       - 5437:5432
     volumes:
-      - postgres_payment_data:/var/lib/postgresql/data
+      - postgres_payment_data:/var/lib/postgresql
 
   rabbitmq:
     image: rabbitmq:management-alpine
@@ -99,6 +99,8 @@ services:
 
   testsservice-api:
     image: zhenya3148/synapzeai-testsservice-backend:1.0
+    depends_on:
+      - postgres_tests_service
     ports:
       - "8080:8080"
 
@@ -107,11 +109,15 @@ services:
     ports:
       - "8081:8080"
       - "8082:8081"
+    depends_on:
+      - postgres_user_service
     env_file:
       - ./.env
 
   paymentservice-api:
     image: zhenya3148/synapzeai-paymentservice-backend:1.0
+    depends_on:
+      - postgres_payment_service
     ports:
       - "8083:8080"
 
